@@ -84,7 +84,6 @@ Licensed under the **Mozilla Public License 2.0 (MPL-2.0)** — see [`LICENSE`](
 
 Created by **Bandar AlSwyan**.
 
----
 ```html
 ---
 
