@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+- Fix project URLs (Homepage/Repository/Issues) that pointed at a placeholder.
+- README: add badges, live-demo (Hugging Face Space) link, and a pointer to the .NET/Unity package. No code changes.
+
 ## 0.1.0
 - Initial release.
 - `shape()` — contextual Arabic shaping (isolated/initial/medial/final, lam-alef + optional الله ligature).
