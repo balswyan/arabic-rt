@@ -82,7 +82,7 @@ pytest -q
 
 Licensed under the **Mozilla Public License 2.0 (MPL-2.0)** — see [`LICENSE`](LICENSE). Use it freely, including in closed-source games and apps; modifications to `arabic-rt`'s own files stay open.
 
-Created by **Bandar AlSwyan** (AlCool).
+Created by **Bandar AlSwyan**.
 
 ---
 
