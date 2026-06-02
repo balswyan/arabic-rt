@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "arabic-rt"
-version = "0.1.0"
+version = "0.1.1"
 description = "Arabic shaping, BiDi, and un-baking for games, TTS, and real-time clients."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -29,9 +29,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/REPLACE_ME/arabic-rt"
-Repository = "https://github.com/REPLACE_ME/arabic-rt"
-Issues = "https://github.com/REPLACE_ME/arabic-rt/issues"
+Homepage = "https://github.com/balswyan/arabic-rt"
+Repository = "https://github.com/balswyan/arabic-rt"
+Issues = "https://github.com/balswyan/arabic-rt/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "arabic-reshaper>=3", "python-bidi>=0.4"]
