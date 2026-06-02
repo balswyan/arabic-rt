@@ -1,0 +1,83 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+"""Unicode tables for Arabic contextual shaping and ligatures.
+
+Data validated byte-for-byte against arabic_reshaper + python-bidi.
+"""
+from __future__ import annotations
+
+# base codepoint -> (joining_type, isolated, initial, medial, final)   0 == form absent
+# joining_type: 'D' dual, 'R' right-joining, 'C' join-causing, 'U' non-joining, 'T' transparent
+FORMS: dict[int, tuple[str, int, int, int, int]] = {
+    0x0621: ("U", 0xFE80, 0, 0, 0),
+    0x0622: ("R", 0xFE81, 0, 0, 0xFE82),
+    0x0623: ("R", 0xFE83, 0, 0, 0xFE84),
+    0x0624: ("R", 0xFE85, 0, 0, 0xFE86),
+    0x0625: ("R", 0xFE87, 0, 0, 0xFE88),
+    0x0626: ("D", 0xFE89, 0xFE8B, 0xFE8C, 0xFE8A),
+    0x0627: ("R", 0xFE8D, 0, 0, 0xFE8E),
+    0x0628: ("D", 0xFE8F, 0xFE91, 0xFE92, 0xFE90),
+    0x0629: ("R", 0xFE93, 0, 0, 0xFE94),
+    0x062A: ("D", 0xFE95, 0xFE97, 0xFE98, 0xFE96),
+    0x062B: ("D", 0xFE99, 0xFE9B, 0xFE9C, 0xFE9A),
+    0x062C: ("D", 0xFE9D, 0xFE9F, 0xFEA0, 0xFE9E),
+    0x062D: ("D", 0xFEA1, 0xFEA3, 0xFEA4, 0xFEA2),
+    0x062E: ("D", 0xFEA5, 0xFEA7, 0xFEA8, 0xFEA6),
+    0x062F: ("R", 0xFEA9, 0, 0, 0xFEAA),
+    0x0630: ("R", 0xFEAB, 0, 0, 0xFEAC),
+    0x0631: ("R", 0xFEAD, 0, 0, 0xFEAE),
+    0x0632: ("R", 0xFEAF, 0, 0, 0xFEB0),
+    0x0633: ("D", 0xFEB1, 0xFEB3, 0xFEB4, 0xFEB2),
+    0x0634: ("D", 0xFEB5, 0xFEB7, 0xFEB8, 0xFEB6),
+    0x0635: ("D", 0xFEB9, 0xFEBB, 0xFEBC, 0xFEBA),
+    0x0636: ("D", 0xFEBD, 0xFEBF, 0xFEC0, 0xFEBE),
+    0x0637: ("D", 0xFEC1, 0xFEC3, 0xFEC4, 0xFEC2),
+    0x0638: ("D", 0xFEC5, 0xFEC7, 0xFEC8, 0xFEC6),
+    0x0639: ("D", 0xFEC9, 0xFECB, 0xFECC, 0xFECA),
+    0x063A: ("D", 0xFECD, 0xFECF, 0xFED0, 0xFECE),
+    0x0640: ("C", 0x0640, 0x0640, 0x0640, 0x0640),  # tatweel (kashida)
+    0x0641: ("D", 0xFED1, 0xFED3, 0xFED4, 0xFED2),
+    0x0642: ("D", 0xFED5, 0xFED7, 0xFED8, 0xFED6),
+    0x0643: ("D", 0xFED9, 0xFEDB, 0xFEDC, 0xFEDA),
+    0x0644: ("D", 0xFEDD, 0xFEDF, 0xFEE0, 0xFEDE),
+    0x0645: ("D", 0xFEE1, 0xFEE3, 0xFEE4, 0xFEE2),
+    0x0646: ("D", 0xFEE5, 0xFEE7, 0xFEE8, 0xFEE6),
+    0x0647: ("D", 0xFEE9, 0xFEEB, 0xFEEC, 0xFEEA),
+    0x0648: ("R", 0xFEED, 0, 0, 0xFEEE),
+    0x0649: ("R", 0xFEEF, 0, 0, 0xFEF0),
+    0x064A: ("D", 0xFEF1, 0xFEF3, 0xFEF4, 0xFEF2),
+}
+
+# alef variant after lam -> (isolated ligature, final ligature)
+LAM_ALEF: dict[int, tuple[int, int]] = {
+    0x0622: (0xFEF5, 0xFEF6),
+    0x0623: (0xFEF7, 0xFEF8),
+    0x0625: (0xFEF9, 0xFEFA),
+    0x0627: (0xFEFB, 0xFEFC),
+}
+
+ALLAH = "\u0627\u0644\u0644\u0647"   # الله
+ALLAH_GLYPH = "\uFDF2"               # ﷲ
+
+# ----- inverse tables (presentation form -> logical base char(s)) for un-baking -----
+_TO_BASE: dict[int, int] = {}
+for _base, _g in FORMS.items():
+    for _form in _g[1:]:
+        if _form and _form not in _TO_BASE:
+            _TO_BASE[_form] = _base
+
+# lam-alef ligature glyph -> "lam + alef-variant" in logical order
+_LAM_ALEF_INVERSE: dict[int, str] = {}
+for _alef, _pair in LAM_ALEF.items():
+    for _lig in _pair:
+        _LAM_ALEF_INVERSE[_lig] = "\u0644" + chr(_alef)
+
+
+def to_base(form: int) -> int | None:
+    return _TO_BASE.get(form)
+
+
+def lam_alef_inverse(form: int) -> str | None:
+    return _LAM_ALEF_INVERSE.get(form)
