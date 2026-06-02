@@ -28,7 +28,7 @@ from ._engine import (
     is_shaped,
 )
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __author__ = "Bandar AlSwyan"
 __license__ = "MPL-2.0"
 
