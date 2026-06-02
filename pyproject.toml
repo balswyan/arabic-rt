@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "arabic-rt"
+version = "0.1.1"
+description = "Arabic shaping, BiDi, and un-baking for games, TTS, and real-time clients."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MPL-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Bandar AlSwyan" }]
+keywords = [
+    "arabic", "bidi", "rtl", "reshaper", "shaping", "presentation-forms",
+    "tts", "text-to-speech", "games", "unity", "internationalization", "i18n",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Games/Entertainment",
+    "Natural Language :: Arabic",
+]
+
+[project.urls]
+Homepage = "https://github.com/balswyan/arabic-rt"
+Repository = "https://github.com/balswyan/arabic-rt"
+Issues = "https://github.com/balswyan/arabic-rt/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "arabic-reshaper>=3", "python-bidi>=0.4"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/arabic_rt"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
