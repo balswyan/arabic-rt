@@ -11,6 +11,10 @@ Most Arabic libraries can turn logical Arabic into correctly *shaped, right-to-l
 
 > Pure shaping/BiDi is well served by existing tools. `arabic-rt`'s reason to exist is the **real-time / game** niche and the **un-baking** capability built for it.
 
+**[🤗 Live demo](https://huggingface.co/spaces/balswyan/arabic-rt)**
+
+**[📦 PyPI](https://pypi.org/project/arabic-rt/)**
+
 ## Install
 
 ```bash
