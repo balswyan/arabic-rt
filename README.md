@@ -2,18 +2,26 @@
 
 **Arabic shaping, BiDi, and *un-baking* for games, TTS, and real-time clients.**
 
+[![PyPI](https://img.shields.io/pypi/v/arabic-rt.svg)](https://pypi.org/project/arabic-rt/)
+[![Python](https://img.shields.io/pypi/pyversions/arabic-rt.svg)](https://pypi.org/project/arabic-rt/)
+[![License: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-brightgreen.svg)](LICENSE)
+[![Open in Spaces](https://huggingface.co/datasets/huggingface/badges/resolve/main/open-in-hf-spaces-sm.svg)](https://huggingface.co/spaces/balswyan/arabic-rt)
+
+**[🤗 Try the live demo](https://huggingface.co/spaces/balswyan/arabic-rt)** · **[📦 PyPI](https://pypi.org/project/arabic-rt/)** · **[🎮 .NET / Unity version](https://github.com/balswyan/arabic-rt-dotnet)**
+
 Most Arabic libraries can turn logical Arabic into correctly *shaped, right-to-left* text. `arabic-rt` does that too — but it also does the part almost nothing else does: it can **reverse** the process, turning baked presentation-form text back into clean logical Arabic. That round-trip is what makes Arabic work in places it normally breaks: multiplayer game chat, naive text renderers, and text-to-speech.
 
 - 🔁 **Bake and un-bake.** `fix()` → renders correctly even on clients that do *zero* Arabic processing. `unfix()` → recovers logical Arabic for TTS, search, or logging.
 - 🎮 **Built for real-time clients.** A `GAME` preset handles word-by-word chat readers (joins words so they aren't split, keeps the first words on top when wrapping).
 - 🧩 **Zero dependencies.** Pure Python. Drop it in anywhere.
-- ✅ **Validated.** Forward output matches `arabic_reshaper` + `python-bidi` byte-for-byte; `unfix(fix(x)) == x` is covered by tests.
+- ✅ **Validated.** Forward output matches `arabic_reshaper` + `python-bidi` byte-for-byte; `unfix(fix(x)) == x` is covered by tests. The C# port produces byte-identical output, so text baked in Unity reads back in Python and vice-versa.
 
 > Pure shaping/BiDi is well served by existing tools. `arabic-rt`'s reason to exist is the **real-time / game** niche and the **un-baking** capability built for it.
 
-**[🤗 Live demo](https://huggingface.co/spaces/balswyan/arabic-rt)**
+## Try it
 
-**[📦 PyPI](https://pypi.org/project/arabic-rt/)**
+A live, no-install demo — type Arabic and watch it shaped, baked, and un-baked in real time:
+**https://huggingface.co/spaces/balswyan/arabic-rt**
 
 ## Install
 
@@ -69,6 +77,11 @@ To make Arabic show up correctly on a client that does no shaping, you "bake" it
 | `contains_arabic(text)` / `is_shaped(text)` | Fast checks. |
 | `Options` / `GAME` | Config dataclass and a ready preset for game chat. |
 
+## Also available for .NET & Unity
+
+The same engine, ported to C# with **byte-for-byte identical output**, targeting `netstandard2.0/2.1` (Unity-compatible):
+**[github.com/balswyan/arabic-rt-dotnet](https://github.com/balswyan/arabic-rt-dotnet)** · `dotnet add package ArabicRt`
+
 ## A note on display fonts
 
 `arabic-rt` produces correct *text*; how it *looks* is your font's job. For rendering shaped Arabic (e.g. in the demo or a UI), a quality **Naskh** face such as **Noto Naskh Arabic** or **Amiri** (both SIL OFL) looks far better than a generic system font.
@@ -90,32 +103,23 @@ Created by **Bandar AlSwyan**.
 
 ---
 
-<section lang="ar" dir="rtl" align="right">
+<div dir="rtl" align="right">
 
-<h2>العربية — نظرة سريعة</h2>
+<h2>عربي — نظرة سريعة</h2>
 
-<p>
-<b>arabic-rt</b> مكتبة لمعالجة النص العربي؛ فهي تدعم تشكيل الحروف وربطها بأشكالها الصحيحة،
-وترتيبها من اليمين إلى اليسار. <b>والأهم من ذلك</b> أنها تدعم عكس العملية، أي تحويل النص
-«المخبوز» — أشكال العرض المقلوبة — مرة أخرى إلى نص عربي منطقي وسليم.
-</p>
+<p><b>arabic-rt</b> مكتبة لمعالجة النص العربي: تشكيل الحروف (وصلها بأشكالها الصحيحة)، وترتيبها من اليمين إلى اليسار، <b>والأهم</b> القدرة على عكس العملية — أي تحويل النص «المخبوز» (أشكال العرض المقلوبة) مرة أخرى إلى عربية منطقية سليمة.</p>
 
-<p>
-هذه القدرة على «فك الخبز» (<code>unfix</code>) هي ما يجعل العربية تعمل في الأماكن التي تتعطّل فيها عادةً،
-مثل دردشات الألعاب الجماعية، والمحرّكات التي لا تعالج العربية، وأنظمة النطق الآلي
-(<span dir="ltr">TTS</span>). وبذلك يظهر النص بشكل صحيح للجميع، بينما يقرأ محرّك الصوت أو البحث
-نسخة منطقية ونظيفة.
-</p>
+<p>هذه القدرة على «فك الخبز» (<code>unfix</code>) هي ما يجعل العربية تعمل في أماكن تتعطّل فيها عادةً: دردشة الألعاب الجماعية، والمحرّكات التي لا تعالج العربية، وأنظمة النطق (TTS). فالنص يظهر صحيحاً للجميع، بينما يقرأ محرّك الصوت أو البحث نسخة منطقية نظيفة.</p>
+
+<p>🤗 جرّب العرض الحيّ: <a href="https://huggingface.co/spaces/balswyan/arabic-rt">huggingface.co/spaces/balswyan/arabic-rt</a></p>
 
 <ul>
-<li><code>fix()</code>: يحوّل العربية المنطقية إلى أشكال عرض جاهزة تظهر بشكل صحيح على أي عميل، حتى بدون معالجة عربية.</li>
-<li><code>unfix()</code>: يعكس العملية لاستعادة العربية المنطقية، لاستخدامها في النطق والبحث والسجلات.</li>
-<li><code>GAME</code>: إعداد جاهز لدردشات الألعاب التي تقرأ الكلمات واحدة تلو الأخرى.</li>
-<li>بدون أي اعتماديات، ومُتحقَّق منها مقابل <code>arabic_reshaper</code> و <code>python-bidi</code> حرفًا بحرف.</li>
+<li><b>fix()</b>: عربية منطقية ← أشكال عرض جاهزة تظهر بشكل صحيح على أي عميل حتى بدون معالجة.</li>
+<li><b>unfix()</b>: عكس العملية لاستعادة العربية المنطقية (للنطق والبحث والسجلات).</li>
+<li><b>GAME</b>: إعداد جاهز لدردشة الألعاب التي تقرأ الكلمات واحدة تلو الأخرى.</li>
+<li>بدون أي اعتماديات، ومُتحقَّق منها مقابل arabic_reshaper و python-bidi حرفاً بحرف.</li>
 </ul>
 
-<p>
-مرخّصة بموجب رخصة <span dir="ltr">MPL-2.0</span>. من إعداد <b>بندر الصويان</b>.
-</p>
+<p>متوفّرة أيضاً لـ .NET و Unity: <a href="https://github.com/balswyan/arabic-rt-dotnet">arabic-rt-dotnet</a>. برخصة MPL-2.0. من إعداد <b>بندر الصويان</b>.</p>
 
-</section>
+</div>
