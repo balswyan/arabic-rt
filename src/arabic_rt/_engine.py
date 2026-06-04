@@ -27,14 +27,14 @@ class Options:
     combine_allah: bool = False        # collapse the word الله into the single glyph ﷲ
     keep_ltr_runs: bool = True         # keep Latin / number / URL runs in reading order
     reverse_word_order: bool = True    # True: full RTL line; False: shape per-word, keep typed order
-    word_joiner: str = " "             # char placed between words (e.g. "\u00A0" for word-by-word readers)
+    word_joiner: str = " "             # char placed between words (e.g. " " for word-by-word readers)
     prevent_word_split: bool = False   # replace spaces with word_joiner so naive readers see one token
     max_line_chars: int = 0            # >0: wrap into lines of N chars (first words on top), each RTL
 
 
 GAME = Options(
     combine_allah=True,
-    word_joiner="\u00A0",
+    word_joiner=" ",
     prevent_word_split=True,
 )
 """Preset tuned for game chat (R.E.P.O.-style word-by-word readers)."""
@@ -264,34 +264,75 @@ def fix(text: str, opts: Options | None = None, **kwargs) -> str:
     return "\n".join(out_lines)
 
 
+# ---------------------------------------------------------------------------
+# unfix helpers
+# ---------------------------------------------------------------------------
+
+def _dechar(ch: str) -> str:
+    """Map one character from presentation form back to its logical base."""
+    cp = ord(ch)
+    if cp == 0xFDF2:                    # ﷲ -> الله
+        return ALLAH
+    la = lam_alef_inverse(cp)           # lam-alef ligature -> lam + alef
+    if la is not None:
+        return la
+    base = to_base(cp)                  # any other presentation form -> base letter
+    if base is not None:
+        return chr(base)
+    if cp == 0x00A0:                    # nbsp word-joiner -> space
+        return " "
+    return ch
+
+
+def _is_arabic_cp(cp: int) -> bool:
+    """True for any Arabic codepoint: base letters or presentation forms."""
+    return (
+        is_arabic_letter(cp)
+        or 0xFB50 <= cp <= 0xFDFF
+        or 0xFE70 <= cp <= 0xFEFF
+    )
+
+
+def _line_is_fully_shaped(line: str) -> bool:
+    """True when every Arabic-containing token in *line* is in presentation form.
+
+    A line produced by fix() has ALL Arabic words shaped + the whole line
+    reversed, so unfix() must reverse the full line.
+
+    A partially-shaped line (OCR artefact, mixed legacy source) has some words
+    with presentation forms and some with raw base letters.  Reversing the full
+    line would scramble the raw words, so we detect this and de-shape in place.
+    """
+    # Split on both regular space and nbsp (GAME preset uses nbsp as joiner)
+    tokens = line.replace(" ", " ").split(" ")
+    arabic_tokens = [
+        t for t in tokens
+        if any(_is_arabic_cp(ord(c)) for c in t)
+    ]
+    if not arabic_tokens:
+        return True   # no Arabic — full-line path is safe (it's a no-op)
+    return all(is_shaped(t) for t in arabic_tokens)
+
+
 def unfix(text: str) -> str:
     """Reverse :func:`fix`: baked visual Arabic -> normal logical Arabic.
 
     Use this to recover readable Arabic for text-to-speech, search, logging,
     or any further processing. No-op on text that is not baked.
+
+    Handles **partial shaping** (OCR / legacy sources where only some words
+    carry presentation forms): shaped words are de-shaped in place without
+    disturbing surrounding unshaped text.
     """
     if not text or not is_shaped(text):
         return text
     out_lines: list[str] = []
     for line in text.replace("\r", "").split("\n"):
-        logical = _bidi_line(line, keep_ltr_runs=True)  # restore glyph order
-        buf: list[str] = []
-        for ch in logical:
-            cp = ord(ch)
-            if cp == 0xFDF2:               # ﷲ -> الله
-                buf.append(ALLAH)
-                continue
-            la = lam_alef_inverse(cp)       # ligature -> lam + alef
-            if la is not None:
-                buf.append(la)
-                continue
-            base = to_base(cp)              # presentation form -> base letter
-            if base is not None:
-                buf.append(chr(base))
-                continue
-            if ch == "\u00A0":              # nbsp word-joiner -> space
-                buf.append(" ")
-                continue
-            buf.append(ch)
-        out_lines.append("".join(buf))
-    return " ".join(line.strip() for line in out_lines).strip()
+        if _line_is_fully_shaped(line):
+            # Fully baked (fix() output): reverse whole line then de-shape.
+            logical = _bidi_line(line, keep_ltr_runs=True)
+            out_lines.append("".join(_dechar(ch) for ch in logical))
+        else:
+            # Partially shaped: de-shape presentation forms in place, no reversal.
+            out_lines.append("".join(_dechar(ch) for ch in line))
+    return " ".join(ln.strip() for ln in out_lines).strip()
