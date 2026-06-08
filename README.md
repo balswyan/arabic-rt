@@ -4,10 +4,11 @@
 
 [![PyPI](https://img.shields.io/pypi/v/arabic-rt.svg)](https://pypi.org/project/arabic-rt/)
 [![Python](https://img.shields.io/pypi/pyversions/arabic-rt.svg)](https://pypi.org/project/arabic-rt/)
+[![NuGet](https://img.shields.io/nuget/v/ArabicRt.svg)](https://www.nuget.org/packages/ArabicRt)
 [![License: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-brightgreen.svg)](LICENSE)
 [![Open in Spaces](https://huggingface.co/datasets/huggingface/badges/resolve/main/open-in-hf-spaces-sm.svg)](https://huggingface.co/spaces/balswyan/arabic-rt)
 
-**[🤗 Try the live demo](https://huggingface.co/spaces/balswyan/arabic-rt)** · **[📦 PyPI](https://pypi.org/project/arabic-rt/)** · **[🎮 .NET / Unity version](https://github.com/balswyan/arabic-rt-dotnet)**
+**[🤗 Live demo](https://huggingface.co/spaces/balswyan/arabic-rt)** · **[📖 Article](https://huggingface.co/spaces/balswyan/arabic-nlp)** · **[📦 PyPI](https://pypi.org/project/arabic-rt/)** · **[🎮 .NET / Unity](https://github.com/balswyan/arabic-rt-dotnet)**
 
 Most Arabic libraries can turn logical Arabic into correctly *shaped, right-to-left* text. `arabic-rt` does that too — but it also does the part almost nothing else does: it can **reverse** the process, turning baked presentation-form text back into clean logical Arabic. That round-trip is what makes Arabic work in places it normally breaks: multiplayer game chat, naive text renderers, and text-to-speech.
 
