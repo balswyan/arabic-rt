@@ -85,12 +85,12 @@ To make Arabic show up correctly on a client that does no shaping, you "bake" it
 |---|---|---|
 | **arabic-rt** | [![PyPI](https://img.shields.io/pypi/v/arabic-rt.svg)](https://pypi.org/project/arabic-rt/) | Core: shape / fix / unfix |
 | **arabic-repair** | [![PyPI](https://img.shields.io/pypi/v/arabic-repair.svg)](https://pypi.org/project/arabic-repair/) | Detect & repair visual-order contamination from PDFs / OCR |
-| **arabic-ocr** | [![PyPI](https://img.shields.io/pypi/v/arabic-ocr.svg)](https://pypi.org/project/arabic-ocr/) | Full PDF + scanned image extraction pipeline |
+| **arabic-extract** | [![PyPI](https://img.shields.io/pypi/v/arabic-extract.svg)](https://pypi.org/project/arabic-extract/) | Full PDF + scanned image extraction pipeline |
 | **arabic-benchmark** | [GitHub](https://github.com/balswyan/arabic-benchmark) | Benchmark proving the reordering gap (+253% tokens, −73% recall) |
 
 ```python
 # The full pipeline — from raw PDF to clean Arabic ready for NLP
-import arabic_ocr as aocr
+import arabic_extract as aocr
 
 result = aocr.extract("document.pdf")  # handles text-layer and scanned pages
 print(result.text)                     # clean logical Arabic
