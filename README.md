@@ -18,6 +18,8 @@ Most Arabic libraries can turn logical Arabic into correctly *shaped, right-to-l
 
 > Pure shaping/BiDi is well served by existing tools. `arabic-rt`'s reason to exist is the **real-time / game** niche and the **un-baking** capability built for it.
 
+![arabic-rt demo](docs/demo.png)
+
 ## Try it
 
 A live, no-install demo — type Arabic and watch it shaped, baked, and un-baked in real time:
