@@ -19,6 +19,8 @@ Most Arabic libraries can turn logical Arabic into correctly *shaped, right-to-l
 
 > Pure shaping/BiDi is well served by existing tools. `arabic-rt`'s reason to exist is the **real-time / game** niche and the **un-baking** capability built for it.
 
+![Logical vs visual-order Arabic — the bytes differ even when the screen looks identical; NFKC cannot fix the order, arabic-repair does](docs/pipeline.png)
+
 ![arabic-rt demo](docs/demo.png)
 
 ## Try it
